@@ -12,7 +12,7 @@ namespace ClassLibrary1.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly LkmContext _context = new LkmContext();
+        private readonly LkmContext _context;
         private readonly DbSet<T> _dbSet;
 
         public GenericRepository(LkmContext context)
@@ -21,9 +21,14 @@ namespace ClassLibrary1.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
 
             foreach (var includeProperty in includeProperties)
             {
@@ -33,9 +38,17 @@ namespace ClassLibrary1.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(object id)
+        public async Task<T> GetByIdAsync(object id, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await _dbSet.FindAsync(id);
+            IQueryable<T> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            // Assuming the primary key name is "Id"
+            return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, "Id").Equals(id));
         }
 
         public async Task AddAsync(T entity)
