@@ -11,63 +11,40 @@ namespace ClassLibrary1.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LkmContext _context;
-        private IGenericRepository<Cart> _CartRepository;
-        private IGenericRepository<CartItem> _CartItemRepository;
-        private IGenericRepository<Category> _CategoryRepository;
-        private IGenericRepository<DiscountCode> _DiscountCodeRepository;
-        private IGenericRepository<Order> _OrderRepository;
-        private IGenericRepository<OrderDiscount> _OrderDiscountRepository;
-        private IGenericRepository<OrderItem> _OrderItemRepository;
-        private IGenericRepository<Payment> _PaymentRepository;
-        private IGenericRepository<PaymentMethod> _PaymentMethodRepository;
-        private IGenericRepository<Product> _ProductRepository;
-        private IGenericRepository<ProductImage> _ProductImageRepository;
-        private IGenericRepository<Role> _RoleRepository;
-
-        private IGenericRepository<Shop> _ShopRepository;
-
-        private IGenericRepository<StudentInfo> _StudentInfoRepository;
-
-        private IGenericRepository<User> _UserRepository;
-
-
+        private readonly Dictionary<Type, object> _repositories = new();
 
         public UnitOfWork(LkmContext context)
         {
             _context = context;
         }
 
-        public IGenericRepository<Cart> Carts =>
-            _CartRepository ??= new GenericRepository<Cart>(_context);
+        // Generic repository getter
+        public IGenericRepository<T> Repository<T>() where T : class
+        {
+            if (_repositories.ContainsKey(typeof(T)))
+                return (IGenericRepository<T>)_repositories[typeof(T)];
 
+            var repository = new GenericRepository<T>(_context);
+            _repositories.Add(typeof(T), repository);
+            return repository;
+        }
 
-        public IGenericRepository<CartItem> CartItems => _CartItemRepository ??= new GenericRepository<CartItem>(_context);
-
-        public IGenericRepository<Category> Categorys => _CategoryRepository ??= new GenericRepository<Category>(_context);
-
-        public IGenericRepository<DiscountCode> DiscountCodes => _DiscountCodeRepository ??= new GenericRepository<DiscountCode>(_context);
-
-        public IGenericRepository<Order> Orders => _OrderRepository ??= new GenericRepository<Order>(_context);
-
-        public IGenericRepository<OrderDiscount> OrderDiscounts => _OrderDiscountRepository ??= new GenericRepository<OrderDiscount>(_context);
-
-        public IGenericRepository<OrderItem> OrderItems => _OrderItemRepository ??= new GenericRepository<OrderItem>(_context);
-
-        public IGenericRepository<Payment> Payments => _PaymentRepository ??= new GenericRepository<Payment>(_context);
-
-        public IGenericRepository<PaymentMethod> PaymentMethods => _PaymentMethodRepository ??= new GenericRepository<PaymentMethod>(_context);
-
-        public IGenericRepository<Product> Products => _ProductRepository ??= new GenericRepository<Product>(_context);
-
-        public IGenericRepository<ProductImage> ProductImages => _ProductImageRepository ??= new GenericRepository<ProductImage>(_context);
-
-        public IGenericRepository<Role> Roles => _RoleRepository ??= new GenericRepository<Role>(_context);
-
-        public IGenericRepository<Shop> Shops => _ShopRepository ??= new GenericRepository<Shop>(_context);
-
-        public IGenericRepository<StudentInfo> StudentInfos => _StudentInfoRepository ??= new GenericRepository<StudentInfo>(_context);
-
-        public IGenericRepository<User> Users => _UserRepository ??= new GenericRepository<User>(_context);
+        // Specific repositories (for strongly-typed usage if needed)
+        public IGenericRepository<Cart> Carts => Repository<Cart>();
+        public IGenericRepository<CartItem> CartItems => Repository<CartItem>();
+        public IGenericRepository<Category> Categories => Repository<Category>();
+        public IGenericRepository<DiscountCode> DiscountCodes => Repository<DiscountCode>();
+        public IGenericRepository<Order> Orders => Repository<Order>();
+        public IGenericRepository<OrderDiscount> OrderDiscounts => Repository<OrderDiscount>();
+        public IGenericRepository<OrderItem> OrderItems => Repository<OrderItem>();
+        public IGenericRepository<Payment> Payments => Repository<Payment>();
+        public IGenericRepository<PaymentMethod> PaymentMethods => Repository<PaymentMethod>();
+        public IGenericRepository<Product> Products => Repository<Product>();
+        public IGenericRepository<ProductImage> ProductImages => Repository<ProductImage>();
+        public IGenericRepository<Role> Roles => Repository<Role>();
+        public IGenericRepository<Shop> Shops => Repository<Shop>();
+        public IGenericRepository<StudentInfo> StudentInfos => Repository<StudentInfo>();
+        public IGenericRepository<User> Users => Repository<User>();
 
         public async Task<int> SaveAsync()
         {
