@@ -40,16 +40,20 @@ namespace ClassLibrary1.Repositories
 
         public async Task<T> GetByIdAsync(object id, params Expression<Func<T, object>>[] includeProperties)
         {
+            var keyName = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.First().Name;
+
             IQueryable<T> query = _dbSet;
 
+            // Bao gồm các thuộc tính liên quan nếu có
             foreach (var includeProperty in includeProperties)
             {
                 query = query.Include(includeProperty);
             }
 
-            // Assuming the primary key name is "Id"
-            return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, "Id").Equals(id));
-        }
+            // Sử dụng tên khóa chính chính xác
+            return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, keyName).Equals(id));
+        
+         }
 
         public async Task AddAsync(T entity)
         {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClassLibrary1.DTO;
+using ClassLibrary1.DTO.Category;
 using ClassLibrary1.DTO.ProductImage;
 using ClassLibrary1.DTO.Role;
 using ClassLibrary1.Models;
@@ -28,6 +29,9 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<Role, RoleDTO>();
             CreateMap<CreateRoleDTO, Role>();
             CreateMap<UpdateRoleDTO, Role>();
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CreateCategoryDTO, Category>();
+            CreateMap<UpdateCategoryDTO, Category>();
         }
     }
 }
