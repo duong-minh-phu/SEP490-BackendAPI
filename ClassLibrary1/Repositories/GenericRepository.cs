@@ -22,8 +22,9 @@ namespace ClassLibrary1.Repositories
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(
-        Expression<Func<T, bool>> filter = null,
-        IEnumerable<Expression<Func<T, object>>> includeProperties = null)
+    Expression<Func<T, bool>> filter = null,
+    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+    params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _dbSet;
 
@@ -32,15 +33,17 @@ namespace ClassLibrary1.Repositories
                 query = query.Where(filter);
             }
 
-            if (includeProperties != null)
+            foreach (var includeProperty in includeProperties)
             {
-                foreach (var includeProperty in includeProperties)
-                {
-                    query = query.Include(includeProperty);
-                }
+                query = query.Include(includeProperty);
             }
 
-            return await query.AsNoTracking().ToListAsync();
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(object id, params Expression<Func<T, object>>[] includeProperties)

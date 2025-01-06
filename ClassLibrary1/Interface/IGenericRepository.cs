@@ -9,7 +9,10 @@ namespace ClassLibrary1.Interface
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, IEnumerable<Expression<Func<T, object>>> includeProperties = null);
+        Task<IEnumerable<T>> GetAllAsync(
+    Expression<Func<T, bool>> filter = null,
+    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+    params Expression<Func<T, object>>[] includeProperties);
         Task<T> GetByIdAsync(object id, params Expression<Func<T, object>>[] includeProperties);
 
         Task AddAsync(T entity);
