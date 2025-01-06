@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClassLibrary1.DTO.Category;
 using ClassLibrary1.DTO.Order;
+using ClassLibrary1.DTO.OrderItem;
 using ClassLibrary1.DTO.Product;
 using ClassLibrary1.DTO.ProductImage;
 using ClassLibrary1.DTO.Role;
@@ -42,6 +43,14 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<OrderUpdateDto, Order>();
             CreateMap<CreateProductDTO, Product>();
             CreateMap<UpdateProductDTO, Product>();
+
+
+            CreateMap<OrderItem, OrderItemDTO>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.Order.Status));
+
+            CreateMap<OrderItemCreateDTO, OrderItem>();
+            CreateMap<OrderItemUpdateDTO, OrderItem>();
         }
     }
 }
