@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ClassLibrary1.DTO.Cart;
+using ClassLibrary1.DTO.CartItem;
 using ClassLibrary1.DTO.Category;
 using ClassLibrary1.DTO.Order;
 using ClassLibrary1.DTO.OrderItem;
@@ -36,10 +38,8 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<Order, OrderDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FullName));
 
-            // Mapping for OrderCreateDto -> Order
             CreateMap<OrderCreateDto, Order>();
 
-            // Mapping for OrderUpdateDto -> Order
             CreateMap<OrderUpdateDto, Order>();
             CreateMap<CreateProductDTO, Product>();
             CreateMap<UpdateProductDTO, Product>();
@@ -51,6 +51,16 @@ namespace ClassLibrary1.AutoMapper
 
             CreateMap<OrderItemCreateDTO, OrderItem>();
             CreateMap<OrderItemUpdateDTO, OrderItem>();
+
+            CreateMap<Cart, CartDTO>().ReverseMap();
+            CreateMap<CartItem, CartItemDTO>()
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price));
+            CreateMap<CartItemCreateDTO, CartItem>();
+            CreateMap<CartItemUpdateDTO, CartItem>();
+
+
+
+
         }
     }
 }
