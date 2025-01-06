@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassLibrary1.DTO
+namespace ClassLibrary1.DTO.Product
 {
     public class UpdateProductDTO
     {

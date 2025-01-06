@@ -1,4 +1,5 @@
-﻿using ClassLibrary1.Interface;
+﻿using ClassLibrary1.AutoMapper;
+using ClassLibrary1.Interface;
 using ClassLibrary1.Models;
 using ClassLibrary1.Repositories;
 using CloudinaryDotNet;
@@ -17,7 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton(new Cloudinary(new Account(
     builder.Configuration["Cloudinary:CloudName"],

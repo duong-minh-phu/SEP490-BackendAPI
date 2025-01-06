@@ -19,7 +19,7 @@ public partial class Product
 
     public int CategoryId { get; set; }
 
-    public int CreatedBy { get; set; }
+    public int UserId { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 
@@ -29,9 +29,9 @@ public partial class Product
 
     public virtual Category Category { get; set; }
 
-    public virtual User CreatedByNavigation { get; set; }
-
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+
+    public virtual User User { get; set; }
 }
