@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClassLibrary1.Models;
 
 public partial class User
 {
+    
     public int UserId { get; set; }
 
     public string FullName { get; set; }

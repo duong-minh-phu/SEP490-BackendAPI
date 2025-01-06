@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using ClassLibrary1.DTO;
 using ClassLibrary1.DTO.Category;
+using ClassLibrary1.DTO.Order;
+using ClassLibrary1.DTO.Product;
 using ClassLibrary1.DTO.ProductImage;
 using ClassLibrary1.DTO.Role;
 using ClassLibrary1.Models;
@@ -17,12 +18,7 @@ namespace ClassLibrary1.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Product, ProductDTO>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.ProductImages.Select(pi => pi.ImageUrl)));
-
-            CreateMap<CreateProductDTO, Product>();
-            CreateMap<UpdateProductDTO, Product>();
+            
             CreateMap<ProductImage, ProductImageDTO>();
             CreateMap<CreateProductImageDTO, ProductImage>();
             CreateMap<UpdateProductImageDTO, ProductImage>();
@@ -32,6 +28,20 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<Category, CategoryDTO>();
             CreateMap<CreateCategoryDTO, Category>();
             CreateMap<UpdateCategoryDTO, Category>();
+            CreateMap<Product, ProductDTO>()
+            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category ))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User ));
+
+            CreateMap<Order, OrderDto>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FullName));
+
+            // Mapping for OrderCreateDto -> Order
+            CreateMap<OrderCreateDto, Order>();
+
+            // Mapping for OrderUpdateDto -> Order
+            CreateMap<OrderUpdateDto, Order>();
+            CreateMap<CreateProductDTO, Product>();
+            CreateMap<UpdateProductDTO, Product>();
         }
     }
 }

@@ -231,16 +231,17 @@ public partial class LkmContext : DbContext
                 .HasMaxLength(255);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Products__Catego__47DBAE45");
 
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Products)
-                .HasForeignKey(d => d.CreatedBy)
+            entity.HasOne(d => d.User).WithMany(p => p.Products)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Products__Create__48CFD27E");
+                .HasConstraintName("FK_Products_Users");
         });
 
         modelBuilder.Entity<ProductImage>(entity =>

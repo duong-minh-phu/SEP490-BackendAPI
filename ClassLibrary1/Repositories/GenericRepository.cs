@@ -21,7 +21,9 @@ namespace ClassLibrary1.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> GetAllAsync(
+        Expression<Func<T, bool>> filter = null,
+        IEnumerable<Expression<Func<T, object>>> includeProperties = null)
         {
             IQueryable<T> query = _dbSet;
 
@@ -30,12 +32,15 @@ namespace ClassLibrary1.Repositories
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties)
+            if (includeProperties != null)
             {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
             }
 
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(object id, params Expression<Func<T, object>>[] includeProperties)

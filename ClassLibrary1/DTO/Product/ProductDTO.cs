@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassLibrary1.DTO
+namespace ClassLibrary1.DTO.Product
 {
     public class ProductDTO
     {
@@ -14,7 +14,7 @@ namespace ClassLibrary1.DTO
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
         public string Specs { get; set; }
-        public int CategoryId { get; set; }
-        public List<string> ImageUrls { get; set; } = new List<string>();
+        public string CategoryName { get; set; }
+        public string Username { get; set; }
     }
 }
