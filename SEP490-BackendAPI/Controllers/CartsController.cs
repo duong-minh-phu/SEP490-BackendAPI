@@ -21,7 +21,6 @@ namespace SEP490_BackendAPI.Controllers
             _mapper = mapper;
         }
         
-        // GET: api/carts/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCartById(int id)
         {
@@ -34,7 +33,6 @@ namespace SEP490_BackendAPI.Controllers
             return Ok(cartDto);
         }
 
-        // POST: api/carts
         [HttpPost]
         public async Task<IActionResult> CreateCart([FromBody] CartDTO cartDto)
         {
@@ -48,7 +46,6 @@ namespace SEP490_BackendAPI.Controllers
             return CreatedAtAction(nameof(GetCartById), new { id = cart.CartId }, cartDto);
         }
 
-        // PUT: api/carts/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCart(int id, [FromBody] CartDTO cartDto)
         {
@@ -66,7 +63,6 @@ namespace SEP490_BackendAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/carts/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart(int id)
         {
