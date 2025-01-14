@@ -63,6 +63,13 @@ namespace ClassLibrary1.Repositories
         
          }
 
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+                .Include(u => u.Role)  // Eager load Role
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
