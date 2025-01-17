@@ -71,28 +71,24 @@ public class AuthController : ControllerBase
                 RoleId = registerUserDTO.RoleId,
                 IsActive = true,
                 CreatedDate = DateTime.Now,
-                IsStudent = registerUserDTO.IsStudent,
+                IsStudent = true,
             };
 
             // Save the new user
             await _unitOfWork.Users.AddAsync(newUser);
             await _unitOfWork.SaveAsync();
-
-            // If the user is a student, create StudentInfo entry
-            if (registerUserDTO.IsStudent == true)
+           
+            var studentInfo = new StudentInfo
             {
-                var studentInfo = new StudentInfo
-                {
-                    UserId = newUser.UserId,
-                    StudentCardImage = registerUserDTO.StudentCardImage,
-                    StudentCode = registerUserDTO.StudentCode,
-                    University = registerUserDTO.University,
-                    CreatedDate = DateTime.Now,
-                };
+                  UserId = newUser.UserId,
+                  StudentCardImage = registerUserDTO.StudentCardImage,
+                  StudentCode = registerUserDTO.StudentCode,
+                  University = registerUserDTO.University,
+                  CreatedDate = DateTime.Now,
+            };
 
                 await _unitOfWork.StudentInfos.AddAsync(studentInfo);
-                await _unitOfWork.SaveAsync();
-            }
+                await _unitOfWork.SaveAsync();         
 
             // Generate JWT token
             var token = _jwtService.GenerateJWT(newUser);
@@ -160,10 +156,10 @@ public class AuthController : ControllerBase
                 return NotFound("User not found");
             }
 
-            // Verify the current password
-            if (!PasswordHasher.VerifyPassword(changePasswordDTO.CurrentPassword, user.PasswordHash))
+            // Validate that the new password and confirm password match
+            if (changePasswordDTO.NewPassword != changePasswordDTO.ConfirmPassword)
             {
-                return BadRequest("Current password is incorrect");
+                return BadRequest("New password and confirmation do not match");
             }
 
             // Hash the new password
@@ -183,6 +179,7 @@ public class AuthController : ControllerBase
         }
     }
 
+
     [HttpPost("reset-password-request")]
     public async Task<IActionResult> ResetPasswordRequest([FromBody] ResetPasswordRequestDTO resetPasswordRequestDTO)
     {
@@ -201,9 +198,17 @@ public class AuthController : ControllerBase
 
             // Generate a new random password (e.g., 8 characters long)
             var newPassword = GenerateRandomPassword(8);
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                throw new Exception("Generated password is invalid.");
+            }
 
             // Hash the new password
             var newHashedPassword = PasswordHasher.HashPassword(newPassword);
+            if (string.IsNullOrEmpty(newHashedPassword))
+            {
+                throw new Exception("Password hashing failed.");
+            }
 
             // Update user's password
             user.PasswordHash = newHashedPassword;
@@ -211,6 +216,11 @@ public class AuthController : ControllerBase
             await _unitOfWork.SaveAsync();
 
             // Send new password via email
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                throw new Exception("User email is null or empty.");
+            }
+
             await _emailService.SendNewPasswordEmail(user.FullName, user.Email, newPassword);
 
             return Ok(new { Message = "A new password has been sent to your email" });
@@ -221,6 +231,7 @@ public class AuthController : ControllerBase
             return BadRequest(new { Message = ex.Message });
         }
     }
+
 
     private string GenerateRandomPassword(int length)
     {

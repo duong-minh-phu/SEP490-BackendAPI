@@ -23,9 +23,6 @@ namespace ClassLibrary1.DTO.Register
         [Required(ErrorMessage = "Role ID is required.")]
         public int RoleId { get; set; }
 
-        [Required(ErrorMessage = "IsStudent is required.")]
-        public bool? IsStudent { get; set; }
-
         [Required(ErrorMessage = "Student Code is required.")]
         public string StudentCode { get; set; }
 
