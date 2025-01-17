@@ -61,9 +61,9 @@ namespace ClassLibrary1.Services
             {
                 // Lấy Role của User từ bảng Role
                 claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.RoleName));  
-                claims.Add(new Claim("userid", user.UserId.ToString())); 
-                claims.Add(new Claim("username", user.FullName));  
-                claims.Add(new Claim("email", user.Email));  
+                claims.Add(new Claim("UserId", user.UserId.ToString())); 
+                claims.Add(new Claim("FullName", user.FullName));  
+                claims.Add(new Claim("Email", user.Email));  
             }
             else
             {
