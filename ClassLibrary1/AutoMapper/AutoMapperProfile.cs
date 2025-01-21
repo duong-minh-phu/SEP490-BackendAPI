@@ -31,9 +31,7 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<Category, CategoryDTO>();
             CreateMap<CreateCategoryDTO, Category>();
             CreateMap<UpdateCategoryDTO, Category>();
-            CreateMap<Product, ProductDTO>()
-            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category ))
-            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User ));
+            
 
             CreateMap<Order, OrderDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FullName));
@@ -58,7 +56,11 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<CartItemCreateDTO, CartItem>();
             CreateMap<CartItemUpdateDTO, CartItem>();
 
+            CreateMap<Product, ProductDTO>()
+            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
+            CreateMap<CreateProductDTO, Product>();
+            CreateMap<UpdateProductDTO, Product>();
 
 
         }

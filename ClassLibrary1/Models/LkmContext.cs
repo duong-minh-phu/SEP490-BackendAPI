@@ -47,7 +47,7 @@ public partial class LkmContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=KHANG\\SQLEXPRESS;Uid=sa;Pwd=12345;Database=lkm;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=SEP490sharelaptop.mssql.somee.com;Uid=phumap942002_SQLLogin_1;Pwd=t54bjv7xjh;Database=SEP490sharelaptop;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
