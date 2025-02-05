@@ -17,7 +17,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJWTService, JWTService>();
+
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() // Cho phép tất cả các nguồn gốc
+              .AllowAnyHeader() // Cho phép tất cả các header
+              .AllowAnyMethod(); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, ...)
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<LkmContext>(options =>
@@ -74,7 +86,7 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 var app = builder.Build();
-
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

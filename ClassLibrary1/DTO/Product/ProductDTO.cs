@@ -14,7 +14,9 @@ namespace ClassLibrary1.DTO.Product
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
         public string Specs { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string Username { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }
