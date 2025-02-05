@@ -7,6 +7,7 @@ using ClassLibrary1.DTO.OrderItem;
 using ClassLibrary1.DTO.Product;
 using ClassLibrary1.DTO.ProductImage;
 using ClassLibrary1.DTO.Role;
+using ClassLibrary1.DTO.User;
 using ClassLibrary1.Models;
 using System;
 using System.Collections.Generic;
@@ -56,11 +57,23 @@ namespace ClassLibrary1.AutoMapper
             CreateMap<CartItemCreateDTO, CartItem>();
             CreateMap<CartItemUpdateDTO, CartItem>();
 
+
             CreateMap<Product, ProductDTO>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
+
             CreateMap<CreateProductDTO, Product>();
             CreateMap<UpdateProductDTO, Product>();
+
+   // User mappings
+            CreateMap<User, UserResponseDTO>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName));
+                
+            CreateMap<UpdateUserRequestDTO, User>()
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) 
+                .ForMember(dest => dest.RoleId, opt => opt.Ignore())       
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore());   
 
 
         }
