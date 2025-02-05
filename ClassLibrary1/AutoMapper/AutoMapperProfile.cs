@@ -61,7 +61,9 @@ namespace ClassLibrary1.AutoMapper
 
             // User mappings
             CreateMap<User, UserResponseDTO>()
-                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()); 
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName));
+
+
 
             CreateMap<UpdateUserRequestDTO, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) 

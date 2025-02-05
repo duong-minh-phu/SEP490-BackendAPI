@@ -23,10 +23,10 @@ namespace SEP490_BackendAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
+            var users = await _unitOfWork.Users.GetAllAsync(includeProperties: u => u.Role);
             if (users == null) 
             {
-                return NotFound(new {Message = "No users found.");
+                return NotFound(new { Message = "No users found." });
             }
             var userDtos = _mapper.Map<IEnumerable<UserResponseDTO>>(users);
             return Ok(userDtos);
